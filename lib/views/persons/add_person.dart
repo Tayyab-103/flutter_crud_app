@@ -216,6 +216,21 @@ class _AddPersonState extends State<AddPerson> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                            child: const Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 20),
+                        )),
+                      ),
+                    ),
+                    InkWell(
                       onTap: () {
                         _submitForm();
                       },
@@ -228,21 +243,6 @@ class _AddPersonState extends State<AddPerson> {
                         child: Center(
                             child: const Text(
                           'Add Person',
-                          style: TextStyle(fontSize: 20),
-                        )),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                        decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Center(
-                            child: const Text(
-                          'Cancel',
                           style: TextStyle(fontSize: 20),
                         )),
                       ),

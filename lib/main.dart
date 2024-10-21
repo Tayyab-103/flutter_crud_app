@@ -1,7 +1,6 @@
 import 'package:crud_api/providers/auth_provider.dart';
 import 'package:crud_api/providers/item_provider.dart';
 import 'package:crud_api/views/persons/add_person.dart';
-import 'package:crud_api/views/persons/person_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Flutter Crud',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
