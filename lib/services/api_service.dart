@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:crud_api/models/person_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   final String baseUrl =
@@ -33,31 +33,29 @@ class ApiService {
 
   // Store token in shared preferences
   Future<void> storeToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('token', token);
   }
 
   // Retrieve token from shared preferences
   Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // return prefs.getString('token');
   }
 
   // Logout user by clearing token
   Future<void> logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.remove('token');
   }
 
   // Fetch items (protected by token)
   Future<PersonModel> fetchAllPersons() async {
-    print('Fetching persons from API...');
     final response = await http.get(Uri.parse(
         'http://127.0.0.1:8000/api/get-people-records')); // Update endpoint if needed
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      print('API Response: $jsonData');
       return PersonModel.fromJson(jsonData);
     } else {
       print('Failed to load persons. Status code: ${response.statusCode}');
@@ -67,39 +65,47 @@ class ApiService {
 
   // CRUD Operations (same as before, with token in headers)
   Future<void> createItem(Record person) async {
-    String? token = await getToken();
+    // String? token = await getToken();
     final response = await http.post(
       Uri.parse('http://127.0.0.1:8000/api/store-people'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode(person.toJson()),
+      body: jsonEncode(person.toJson()),
     );
-    if (response.statusCode != 201) {
-      throw Exception('Failed to create item');
+    if (response.statusCode == 201) {
+      print('Person created successfully!');
+      return null;
+    } else {
+      // Log the response for debugging
+      // throw Exception('Failed to create person');
     }
   }
 
-  Future<void> updateItem(String id, PersonModel person) async {
-    String? token = await getToken();
-    final response = await http.put(
-      Uri.parse('$baseUrl/items/$id'),
+  Future<void> updateItem(Record person) async {
+    // String? token = await getToken();
+
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/api/update-people-record'),
       headers: {
-        'Authorization': 'Bearer $token',
+        // 'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
       body: json.encode(person.toJson()),
     );
-    if (response.statusCode != 200) {
-      throw Exception('Failed to update item');
+    if (response.statusCode == 200) {
+      print('Person updated successfully!');
+    } else {
+      print('Failed to update person. Status code: ${response.statusCode}');
+      print(
+          'Response body: ${response.body}'); // Log the response body for debugging
+      //  throw Exception('Failed to update person');
     }
   }
 
-  Future<void> deleteItem(String id) async {
-    String? token = await getToken();
+  Future<void> deleteItem(int id) async {
+    //  String? token = await getToken();
     final response = await http.delete(
-      Uri.parse('$baseUrl/items/$id'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+      Uri.parse('http://127.0.0.1:8000/api/delete-people-record/$id'),
+      headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to delete item');
